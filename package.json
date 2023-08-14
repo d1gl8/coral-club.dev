@@ -20,6 +20,8 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "nuxt": "^3.6.5",
-    "prettier": "^3.0.1"
+    "prettier": "^3.0.1",
+    "sass": "^1.65.1",
+    "sass-loader": "^13.3.2"
   }
 }
