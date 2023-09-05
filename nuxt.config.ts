@@ -1,4 +1,7 @@
+// import { i18n } from "./locales/config";
+
 export default defineNuxtConfig({
+  ssr: false,
   devtools: { enabled: true },
   css: ["~/assets/styles/main.scss"],
   vite: {
@@ -13,4 +16,5 @@ export default defineNuxtConfig({
       },
     },
   },
+  modules: ["@nuxtjs/i18n"],
 });
