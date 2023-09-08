@@ -1,8 +1,11 @@
 // import { i18n } from "./locales/config";
 
 export default defineNuxtConfig({
+  devtools: { enabled: false },
   ssr: false,
-  devtools: { enabled: true },
+  app: {
+    rootId: "coral-club",
+  },
   css: ["~/assets/styles/main.scss"],
   vite: {
     css: {
@@ -15,6 +18,9 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  nitro: {
+    compressPublicAssets: true,
   },
   modules: ["@nuxtjs/i18n"],
 });

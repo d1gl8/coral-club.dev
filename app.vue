@@ -1,91 +1,65 @@
+<script setup lang="ts">
+import useTranslates from "@/use/translates";
+
+const { currentLocale, availableLocales, translatesPending, changeLang } =
+  await useTranslates();
+</script>
+
 <template>
-  <select name="lang">
-    <option
-      v-for="loc in availableLocales"
-      :key="loc.code"
-      :value="loc.name"
-      @click="switchLang(loc)"
-    >
+  <select
+    name="lang"
+    :value="currentLocale.code"
+    @change="changeLang($event.target)"
+  >
+    <option v-for="loc in availableLocales" :key="loc.code" :value="loc.name">
       {{ loc.code }}
     </option>
   </select>
-  <h1 class="main-title">{{ $t("TITLE_MAIN") }}</h1>
-  <!-- <h1 class="main-title">title</h1> -->
+  <section id="checkout" v-if="!translatesPending">
+    <header>
+      <h1 class="title">{{ $t("checkout_title") }}</h1>
+      <div class="subtitle">
+        <p>{{ $t("receiver_country") }}</p>
+        <p class="country">?getCountry.name?</p>
+        <in-svg src="/images/icons/question.svg" />
+      </div>
+    </header>
+  </section>
+  <p v-else>loading ...</p>
 </template>
 
-<script setup lang="ts">
-const initUrl = "https://gb.coral.club/restApi/vue/init";
-let { availableLocales } = useI18n();
-const { setLocale, setLocaleMessage } = useI18n();
+<style lang="scss">
+#coral-club {
+  position: relative;
+  padding: 70px 16px 24px;
+}
+select {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
 
-type localeT = {
-  code: string;
-  current: boolean;
-  url: string;
-};
-
-type localeDt = {
-  locale: string;
-  location: {
-    alpha2: string;
-    currency: string;
-    flag: string;
-    locales: localeT[];
-    name: string;
-  };
-};
-
-const { data: localeData, refresh }: Ref<localeDt> | any = await useFetch(
-  initUrl
-);
-
-const {
-  // locale,
-  location: { locales: localesFromApi },
-} = localeData.value;
-
-// availableLocales = localesFromApi;
-// console.log(availableLocales);
-
-// current locale from api?
-// availableLocales.find(
-//     (loc: localeT) => loc.current
-//   )
-
-const currentLocaleIdx: Ref<localeT> | any = ref(
-  availableLocales.findIndex((loc: localeT) => loc.current)
-);
-console.log(currentLocaleIdx.value);
-
-availableLocales[currentLocaleIdx.value].current = false;
-setTimeout(async () => {
-  console.log(availableLocales);
-  await refresh();
-  console.log(currentLocaleIdx.value);
-}, 1000);
-
-// const setLang = async () => {
-//   setLocale(currentLocale.value.code);
-//   const {
-//     data: translates,
-//     // pending,
-//     // refresh: refreshTranslates,
-//   } = await useLazyFetch(currentLocale.value.url, {
-//     transform: (value: string) => {
-//       return JSON.parse(value);
-//     },
-//   });
-
-//   // await pending()
-//   setLocaleMessage(currentLocale.value.code, translates.value);
-// };
-
-// const switchLang = async (loc: localeT): Promise<void> => {
-//   currentLocale.current = false
-
-//   // refresh();
-//   await setLang();
-// };
-
-// await setLang();
-</script>
+#checkout {
+  header {
+    h1.title {
+      width: 100%;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      display: flex;
+      align-items: center;
+      p {
+        display: inline-flex;
+        &.country {
+          margin: 0 8px 0 12px;
+        }
+      }
+      svg {
+        width: 24px;
+        height: 24px;
+        color: #bec1c6;
+      }
+    }
+  }
+}
+</style>
